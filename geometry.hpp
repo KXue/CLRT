@@ -2,29 +2,16 @@
 #define GEOMETRY_H
 
 class Material;
-
-class Sphere {
-  Material *m;
-  float pos[3];
-  float radius;
-
-public:
-  Sphere();
-  Sphere(Material *m, float radius);
-  Sphere(Material *m, float radius, float pos[3]);
-  ~Sphere();
-};
-
-class Plane {
-  Material *m;
-  float normal[3];
-  float point[3];
+class Quaternion {
+  float a;
+  float b;
+  float c;
+  float d;
 
 public:
-  Plane();
-  Plane(Material *m);
-  Plane(Material *m, float normal[3], float point[3]);
-  ~Plane();
+  Quaternion();
+  Quaternion(float a, float b, float c, float d);
+  ~Quaternion();
 };
 
 class Ray {
@@ -35,6 +22,41 @@ public:
   Ray();
   Ray(float origin[3], float dir[3]);
   ~Ray();
+};
+
+class Body {
+public:
+  virtual void getMaterial() = 0;
+  virtual bool intersects(const Ray &ray) = 0;
+  virtual void translate(int dx, int dy, int dz);
+  virtual void rotate(int dxAxis, int dyAxis, int dzAxis);
+  virtual void rotate(const Quaternion &first, const Quaternion &second);
+
+protected:
+  Material *m;
+  float transform[16];
+};
+
+class Sphere : public Body {
+  float pos[3];
+  float radius;
+
+public:
+  Sphere();
+  Sphere(Material *m, float radius);
+  Sphere(Material *m, float radius, float pos[3]);
+  ~Sphere();
+};
+
+class Plane : public Body {
+  float normal[3];
+  float point[3];
+
+public:
+  Plane();
+  Plane(Material *m);
+  Plane(Material *m, float normal[3], float point[3]);
+  ~Plane();
 };
 
 class Light {

@@ -21,7 +21,7 @@ public:
          float aspectRatio = (4.0 / 3.0), bool curved = false);
   ~Camera();
 
-  void rotate(Quaternion *first, Quaternion *second);
+  void rotate(const Quaternion *first, const Quaternion *second);
   void rotate(float dxAxis, float dyAxis, float dzAxis);
   void translate(float dx, float dy, float dz);
   void shootPrimaryRays(Ray (&rays)[]);

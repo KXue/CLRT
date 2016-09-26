@@ -2,25 +2,45 @@
 #define GEOMETRY_H
 
 class Material;
-class Quaternion {
+class Qua_t {
   float a;
   float b;
   float c;
   float d;
 
 public:
-  Quaternion();
-  Quaternion(float a, float b, float c, float d);
-  ~Quaternion();
+  Qua_t();
+  Qua_t(float a, float b, float c, float d);
+  ~Qua_t();
 };
 
+class Vec_t {
+  float x;
+  float y;
+  float z;
+
+public:
+  Vec_t();
+  Vec_t(float x, float y, float z);
+  ~Vec_t();
+  Vec_t operator+(const Vec_t &);
+  Vec_t operator*(const Vec_t &);
+  Vec_t cross(const Vec_t &);
+  Vec_t getNormalized();
+  float getLength();
+};
+
+Vec_t operator*(const float, const Vec_t &);
+
+Vec_t operator*(const Vec_t &, const float);
+
 class Ray {
-  float origin[3];
-  float dir[3];
+  Vec_t origin;
+  Vec_t dir;
 
 public:
   Ray();
-  Ray(float origin[3], float dir[3]);
+  Ray(Vec_t origin, Vec_t dir);
   ~Ray();
 };
 
@@ -30,11 +50,9 @@ public:
   virtual bool intersects(const Ray &ray) = 0;
   virtual void translate(int dx, int dy, int dz);
   virtual void rotate(int dxAxis, int dyAxis, int dzAxis);
-  virtual void rotate(const Quaternion &first, const Quaternion &second);
 
 protected:
   Material *m;
-  float transform[16];
 };
 
 class Sphere : public Body {

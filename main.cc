@@ -15,7 +15,7 @@
 #endif
 
 int main() {
-  //<editor-fold> OPENCL BOILERPLATE *******************************************
+  //<editor-fold> BOILERPLATE *******************************************
 
   /*
 
@@ -83,6 +83,13 @@ int main() {
   // for now start simple
 
   //</editor-fold>
+
+  //<editor-fold> CAST RAYS ****************************************************
+  //</editor-fold>
+
+  //<editor-fold> RENDER ****************************************************
+  //</editor-fold>
+
   if (SDL_Init(SDL_INIT_VIDEO) != 0) {
     std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
     return 1;

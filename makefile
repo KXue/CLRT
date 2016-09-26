@@ -3,7 +3,7 @@ SDL = -F/Library/Frameworks -framework SDL2
 # If your compiler is a bit older you may need to change -std=c++11 to -std=c++0x
 CXXFLAGS = -Wall -c -std=c++11 -F/Library/Frameworks
 LDFLAGS = $(SDL)
-EXE = SDL_Lesson0
+EXE = Run_This
 
 all: $(EXE)
 

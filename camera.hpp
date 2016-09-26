@@ -1,10 +1,9 @@
 #ifndef CAMERA_H
 #define CAMERA_H
 #define _USE_MATH_DEFINES // for C++
+#include "geometry.hpp"
 #include <cmath>
-
-class Ray;
-class Quaternion;
+#include <vector>
 
 class Camera {
   bool curved;
@@ -13,18 +12,23 @@ class Camera {
   float fov; // in radians of course
   float aspectRatio;
   float focalLength;
-  float transform[16];
+  Vec_t position;
+  Vec_t up;
+  Vec_t direction;
+
+  std::vector<Ray> makeCurvedPrimaryRays();
+  std::vector<Ray> makeFlatPrimaryRays();
+  Vec_t findTopLeft();
 
 public:
-  Camera();
   Camera(int pixelWidth = 800, int pixelHeight = 600, float fov = (M_PI / 2.0),
-         float aspectRatio = (4.0 / 3.0), bool curved = false);
+         float aspectRatio = (4.0 / 3.0), float focalLength = 1.0,
+         bool curved = false);
   ~Camera();
 
-  void rotate(const Quaternion *first, const Quaternion *second);
   void rotate(float dxAxis, float dyAxis, float dzAxis);
   void translate(float dx, float dy, float dz);
-  void shootPrimaryRays(Ray (&rays)[]);
+  std::vector<Ray> makePrimaryRays();
 };
 
 #endif

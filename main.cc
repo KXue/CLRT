@@ -1,5 +1,5 @@
-#include <SDL/SDL_opengl.h>
-#include <SDL2/SDL.h>
+//#include <SDL/SDL_opengl.h>
+//#include <SDL2/SDL.h>
 #include <fstream>
 #include <iostream>
 //#include <SDL2/SDL_opengl.h>
@@ -7,12 +7,12 @@
 #include <OpenCL/opencl.h>
 #else
 #include <CL/cl.h>
+#endif
 
 #include "camera.hpp"
 #include "geometry.hpp"
 #include "material.hpp"
-
-#endif
+#include <vector>
 
 int main() {
   //<editor-fold> BOILERPLATE *******************************************
@@ -76,43 +76,53 @@ int main() {
   cl_kernel kernel = clCreateKernel(program, "adder", NULL);
 
   */
-
+  Camera testCamera = Camera();
   //</editor-fold>
 
   //<editor-fold> DEFINE GEOMETRY **********************************************
-  // for now start simple
-
+  Sphere testSphere = Sphere(nullptr, 2, Vec_3t(0, 0, -5));
   //</editor-fold>
 
   //<editor-fold> CAST RAYS ****************************************************
+  std::vector<Ray> rays = testCamera.makePrimaryRays();
   //</editor-fold>
-
+  int buffer[600][800];
+  Vec_3t testVect;
+  for (int i = 0; i < 600; i++) {
+    for (int j = 0; j < 800; j++) {
+      buffer[i][j] = testSphere.intersects(rays.at(j + i * 600), testVect);
+      if (buffer[i][j]) {
+        std::cout << "Intersect: " << testVect.toString() << std::endl;
+      }
+    }
+  }
   //<editor-fold> RENDER ****************************************************
   //</editor-fold>
+  /*
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+      std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
+      return 1;
+    }
 
-  if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-    std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
-    return 1;
-  }
+    SDL_Window *win =
+        SDL_CreateWindow("Hello World!", 100, 100, 640, 480, SDL_WINDOW_SHOWN);
+    if (win == nullptr) {
+      std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
+      SDL_Quit();
+      return 1;
+    }
 
-  SDL_Window *win =
-      SDL_CreateWindow("Hello World!", 100, 100, 640, 480, SDL_WINDOW_SHOWN);
-  if (win == nullptr) {
-    std::cout << "SDL_CreateWindow Error: " << SDL_GetError() << std::endl;
-    SDL_Quit();
-    return 1;
-  }
-
-  SDL_Renderer *ren = SDL_CreateRenderer(
-      win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-  if (ren == nullptr) {
+    SDL_Renderer *ren = SDL_CreateRenderer(
+        win, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    if (ren == nullptr) {
+      SDL_DestroyWindow(win);
+      std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
+      SDL_Quit();
+      return 1;
+    }
+    SDL_Delay(10000);
+    SDL_DestroyRenderer(ren);
     SDL_DestroyWindow(win);
-    std::cout << "SDL_CreateRenderer Error: " << SDL_GetError() << std::endl;
     SDL_Quit();
-    return 1;
-  }
-  SDL_Delay(10000);
-  SDL_DestroyRenderer(ren);
-  SDL_DestroyWindow(win);
-  SDL_Quit();
+    */
 }

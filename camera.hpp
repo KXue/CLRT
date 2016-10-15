@@ -12,13 +12,13 @@ class Camera {
   float fov; // in radians of course
   float aspectRatio;
   float focalLength;
-  Vec_t position;
-  Vec_t up;
-  Vec_t direction;
+  Vec_3t position;
+  Vec_3t up;
+  Vec_3t direction;
 
   std::vector<Ray> makeCurvedPrimaryRays();
   std::vector<Ray> makeFlatPrimaryRays();
-  Vec_t findTopLeft();
+  Vec_3t findTopLeft(Vec_3t left);
 
 public:
   Camera(int pixelWidth = 800, int pixelHeight = 600, float fov = (M_PI / 2.0),

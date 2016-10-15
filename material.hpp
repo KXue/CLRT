@@ -13,7 +13,6 @@ public:
            float refractivity = 0);
   Material(float color[4], int computeColorType = 0, float reflectivity = 0,
            float refractivity = 0);
-  ~Material();
   int getComputeColorType();
   const float &getColor() const;
   float getReflectivity();

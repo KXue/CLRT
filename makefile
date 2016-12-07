@@ -7,8 +7,8 @@ EXE = Run_This
 
 all: $(EXE)
 
-$(EXE): main.o camera.o Ray.o Sphere.o Vec_3t.o
-	$(CXX) $(LDFLAGS) main.o camera.o Ray.o Sphere.o Vec_3t.o -o $@
+$(EXE): main.o camera.o Ray.o Sphere.o Vec_3t.o Display.o
+	$(CXX) $(LDFLAGS) main.o camera.o Ray.o Sphere.o Vec_3t.o Display.o -o $@
 
 main.o: main.cc
 	$(CXX) $(CXXFLAGS) $< -o $@
@@ -23,6 +23,9 @@ Sphere.o: Sphere.cc
 	$(CXX) $(CXXFLAGS) $< -o $@
 
 Vec_3t.o: Vec_3t.cc
+	$(CXX) $(CXXFLAGS) $< -o $@
+
+Display.o: display.cc
 	$(CXX) $(CXXFLAGS) $< -o $@
 
 clean:

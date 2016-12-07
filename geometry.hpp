@@ -8,18 +8,6 @@ class Material;
 // typedef vec_t vec_4t[4];
 // typedef vec_t qua_t[4];
 
-class Qua_t {
-  float a;
-  float b;
-  float c;
-  float d;
-
-public:
-  Qua_t();
-  Qua_t(float a, float b, float c, float d);
-  ~Qua_t();
-};
-
 class Vec_3t {
   float x;
   float y;
@@ -42,6 +30,19 @@ public:
 
 Vec_3t operator*(const float, const Vec_3t &);
 Vec_3t operator/(const float, const Vec_3t &);
+
+class Qua_t {
+  float a;
+  float b;
+  float c;
+  float d;
+
+public:
+  Qua_t();
+  Qua_t(const Vec_3t &first, const Vec_3t &second);
+  Qua_t(float a, float b, float c, float d);
+  ~Qua_t();
+};
 
 class Ray {
   Vec_3t origin;

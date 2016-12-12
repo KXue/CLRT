@@ -19,14 +19,18 @@ int main() {
 
   Camera testCamera = Camera();
 
-  Sphere testSphere = Sphere(nullptr, 2, Vec_3t(0, 0, -10));
+  Sphere testSphere = Sphere(nullptr, 2, 0, 0, -10);
+  std::cout << "Made Sphere." << std::endl;
 
-  std::vector<Ray> rays = testCamera.makePrimaryRays();
+  std::vector<Ray*> rays = testCamera.makePrimaryRays();
+
+  std::cout << "Made Rays." << std::endl;
+
 
   unsigned char *buffer = new unsigned char[600 * 4 * 800];
   Vec_3t testVect;
   for (int i = 0; i < 600 * 800; i++) {
-    if (testSphere.intersects(rays.at(i), testVect)) {
+    if (testSphere.intersects(*(rays.at(i)), testVect)) {
       buffer[i * 4] = 255;
       buffer[i * 4 + 1] = 255;
       buffer[i * 4 + 2] = 0;
@@ -39,11 +43,15 @@ int main() {
     }
   }
 
+  std::cout << "Made Buffer." << std::endl;
+
   while (!display.IsClosed()) {
     display.Clear(0.0f, 0.15f, 0.3f, 1.0f);
     display.DrawTexture(buffer, 800, 600);
     display.Update();
   }
+
+  delete[] buffer;
   return 0;
   /*
 

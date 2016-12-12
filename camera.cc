@@ -17,7 +17,7 @@ void Camera::rotate(float dxAxis, float dyAxis, float dzAxis) {}
 
 void Camera::translate(float dx, float dy, float dz) {}
 
-std::vector<Ray> Camera::makePrimaryRays() {
+std::vector<Ray*> Camera::makePrimaryRays() {
   if (curved) {
     return makeCurvedPrimaryRays();
   } else {
@@ -25,8 +25,8 @@ std::vector<Ray> Camera::makePrimaryRays() {
   }
 }
 //<editor-fold> Private Methods ************************************************
-std::vector<Ray> Camera::makeCurvedPrimaryRays() {
-  std::vector<Ray> rays;
+std::vector<Ray*> Camera::makeCurvedPrimaryRays() {
+  std::vector<Ray*> rays;
   float dx = fov / float(pixelWidth);
   float dy = fov / (float(pixelHeight) * aspectRatio);
   float angleX = (fov / 2) - (dx / 2);
@@ -40,9 +40,11 @@ std::vector<Ray> Camera::makeCurvedPrimaryRays() {
   return rays;
 };
 
-std::vector<Ray> Camera::makeFlatPrimaryRays() {
-  std::vector<Ray> rays;
-  Vec_3t left = up.cross(direction);
+std::vector<Ray*> Camera::makeFlatPrimaryRays() {
+  std::vector<Ray*> rays;
+  Vec_3t left = cross(up, direction);
+
+  std::cout << "left" << left.toString() << std::endl;
 
   float sideLength = focalLength * tan(fov / 2);
   float topLength = sideLength / aspectRatio;
@@ -50,14 +52,19 @@ std::vector<Ray> Camera::makeFlatPrimaryRays() {
   Vec_3t dy = -(up * topLength * 2 / pixelHeight);
   Vec_3t dx = -(left * sideLength * 2 / pixelWidth);
 
+  std::cout << "dx" << dx.toString() << std::endl;
+  std::cout << "dy" << dy.toString() << std::endl;
+
   Vec_3t topLeft = direction * focalLength + up * topLength + left * sideLength;
   Vec_3t screenPoint;
+
+  std::cout << "topLeft" << topLeft.toString() << std::endl;
 
   for (int i = 0; i < pixelHeight; i++) {
     for (int j = 0; j < pixelWidth; j++) {
       screenPoint = topLeft + dx * j + dy * i;
       rays.push_back(
-          Ray(screenPoint, (screenPoint - position).getNormalized()));
+          new Ray(screenPoint, (screenPoint - position).getNormalized()));
     }
   }
   return rays;

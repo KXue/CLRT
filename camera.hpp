@@ -16,8 +16,8 @@ class Camera {
   Vec_3t up;
   Vec_3t direction;
 
-  std::vector<Ray> makeCurvedPrimaryRays();
-  std::vector<Ray> makeFlatPrimaryRays();
+  std::vector<Ray*> makeCurvedPrimaryRays();
+  std::vector<Ray*> makeFlatPrimaryRays();
   Vec_3t findTopLeft(Vec_3t left);
 
 public:
@@ -28,7 +28,7 @@ public:
 
   void rotate(float dxAxis, float dyAxis, float dzAxis);
   void translate(float dx, float dy, float dz);
-  std::vector<Ray> makePrimaryRays();
+  std::vector<Ray*> makePrimaryRays();
 };
 
 #endif

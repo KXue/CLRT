@@ -3,14 +3,19 @@
 #include <cmath>
 
 Sphere::Sphere(Material *m, float radius, Vec_3t pos)
-    : pos(pos), radius(radius), m(m){};
-Sphere::~Sphere() { delete m; };
+    : pos(new Vec_3t(pos)), radius(radius), m(m){};
+Sphere::Sphere(Material *m, float radius, float x, float y, float z)
+    : pos(new Vec_3t(x, y, z)), radius(radius), m(m){};
+Sphere::~Sphere() { 
+  delete m; 
+  delete pos;
+};
 
 Material *Sphere::getMaterial() { return m; };
 bool Sphere::intersects(const Ray &ray, Vec_3t &point) {
   Vec_3t rayPos = ray.getPosition();
   Vec_3t rayDir = ray.getDir();
-  Vec_3t lenVector = rayPos - pos;
+  Vec_3t lenVector = rayPos - (*pos);
   float b = (rayDir * lenVector);
   float c = (lenVector * lenVector) - (radius * radius);
 
@@ -34,6 +39,6 @@ bool Sphere::intersects(const Ray &ray, Vec_3t &point) {
   return true;
 };
 void Sphere::translate(int dx, int dy, int dz) {
-  pos = pos + Vec_3t(dx, dy, dz);
+  *pos = (*pos) + Vec_3t(dx, dy, dz);
 };
 void Sphere::rotate(int dxAxis, int dyAxis, int dzAxis){};

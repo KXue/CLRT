@@ -1,21 +1,22 @@
 #ifndef GEOMETRY_H
 #define GEOMETRY_H
 #include <string>
-class Material;
+#include "material.hpp"
 
 class Vec_3t {
-  float x;
-  float y;
-  float z;
+  float m_x;
+  float m_y;
+  float m_z;
 
 public:
   Vec_3t(float x = 0, float y = 0, float z = 0);
   Vec_3t(const Vec_3t &obj);
+  ~Vec_3t();
   Vec_3t& operator=(const Vec_3t &obj);
   Vec_3t operator-() const;
-  Vec_3t getNormalized() const;
-  float getLength() const;
-  std::string toString() const;
+  Vec_3t GetNormalized() const;
+  float GetLength() const;
+  std::string ToString() const;
 
   friend Vec_3t operator+(const Vec_3t &obj, const Vec_3t &obj2);
   friend Vec_3t operator-(const Vec_3t &obj, const Vec_3t &obj2);
@@ -41,61 +42,63 @@ public:
 };
 
 class Ray {
-  Vec_3t* origin;
-  Vec_3t* dir;
+  Vec_3t m_origin;
+  Vec_3t m_dir;
 
 public:
-  Ray();
-  Ray(Vec_3t origin, Vec_3t dir);
+  Ray(Vec_3t origin = Vec_3t(), Vec_3t dir = Vec_3t(0, 0, 1));
   ~Ray();
-  Vec_3t getDir() const;
-  Vec_3t getPosition() const;
+  Vec_3t GetDirection() const;
+  Vec_3t GetOrigin() const;
 };
 
 class Body {
 public:
-  virtual Material *getMaterial() = 0;
-  virtual bool intersects(const Ray &ray, Vec_3t &point) = 0;
-  virtual void translate(int dx, int dy, int dz) = 0;
-  virtual void rotate(int dxAxis, int dyAxis, int dzAxis) = 0;
+  virtual Material GetMaterial() = 0;
+  virtual bool Intersects(const Ray &ray, Vec_3t &point) = 0;
+  virtual void Translate(int dx, int dy, int dz) = 0;
+  virtual void Rotate(int dxAxis, int dyAxis, int dzAxis) = 0;
 };
 
 class Sphere : public Body {
-  Vec_3t *pos;
+  Vec_3t m_position;
+  Vec_3t m_direction;
+  Vec_3t m_up;
   float radius;
-  Material *m;
+  Material m_material;
 
 public:
-  Sphere(Material *m = nullptr, float radius = 1, Vec_3t pos = Vec_3t());
-  Sphere(Material *m = nullptr, float radius = 1, float x = 0, float y = 0, float z = 0);
+  Sphere(Material material, float radius = 1, Vec_3t position = Vec_3t(), Vec_3t direction = Vec_3t(0, 0, 1), Vec_3t up = Vec_3t(0, 1, 0));
+  Sphere(Material material, float radius = 1, float x = 0, float y = 0, float z = 0, float dx = 0, float dy = 0, float dz = 1, float ux = 0, float uy = 1, float uz = 0);
   ~Sphere();
-  Material *getMaterial();
-  bool intersects(const Ray &ray, Vec_3t &point);
-  void translate(int dx, int dy, int dz);
-  void rotate(int dxAxis, int dyAxis, int dzAxis);
+  Material GetMaterial();
+  bool Intersects(const Ray &ray, Vec_3t &point);
+  void Translate(int dx, int dy, int dz);
+  void Rotate(int dxAxis, int dyAxis, int dzAxis);
 };
 
 class Plane : public Body {
-  Vec_3t normal;
-  Vec_3t point;
-  Material *m;
+  Vec_3t m_normal;
+  Vec_3t m_point;
+  Material m_material;
 
 public:
   Plane();
-  Plane(Material *m);
-  Plane(Material *m, Vec_3t normal, Vec_3t point);
+  Plane(Material m);
+  Plane(Material m, Vec_3t normal, Vec_3t point);
   ~Plane();
 };
 
 class Light {
-  Vec_3t pos;
-  Vec_3t dir;
+  Vec_3t m_position;
+  Vec_3t m_direction;
+  Vec_3t m_up;
   bool directional;
   float color[4];
 
 public:
   Light();
-  Light(Vec_3t pos, Vec_3t dir, float color[4], bool directional = false);
+  Light(Vec_3t position, Vec_3t direction, float color[4], bool directional = false);
   ~Light();
 };
 

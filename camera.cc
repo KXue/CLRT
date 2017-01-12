@@ -4,67 +4,62 @@
 
 Camera::Camera(int pixelWidth, int pixelHeight, float fov, float aspectRatio,
                float focalLength, bool curved)
-    : curved(curved), pixelWidth(pixelWidth), pixelHeight(pixelHeight),
-      fov(fov), aspectRatio(aspectRatio), focalLength(focalLength),
-      position(Vec_3t(0.0, 0.0, 0.0)), up(Vec_3t(0.0, 1.0, 0.0)),
-      direction(Vec_3t(0.0, 0.0, -1.0)) {}
+    : m_curved(curved), m_pixelWidth(pixelWidth), m_pixelHeight(pixelHeight),
+      m_fov(fov), m_aspectRatio(aspectRatio), m_focalLength(focalLength),
+      m_position(Vec_3t(0.0, 0.0, 0.0)), m_up(Vec_3t(0.0, 1.0, 0.0)),
+      m_direction(Vec_3t(0.0, 0.0, -1.0)) {}
 
 Camera::~Camera() {}
 
-// void Camera::rotate(const Quaternion *first, const Quaternion *second) {}
 
-void Camera::rotate(float dxAxis, float dyAxis, float dzAxis) {}
+void Camera::Rotate(float dxAxis, float dyAxis, float dzAxis) {}
 
-void Camera::translate(float dx, float dy, float dz) {}
+void Camera::Translate(float dx, float dy, float dz) {}
 
-std::vector<Ray*> Camera::makePrimaryRays() {
-  if (curved) {
-    return makeCurvedPrimaryRays();
+std::vector<Ray> Camera::MakePrimaryRays() {
+  if (m_curved) {
+    return MakeCurvedPrimaryRays();
   } else {
-    return makeFlatPrimaryRays();
+    return MakeFlatPrimaryRays();
   }
 }
 //<editor-fold> Private Methods ************************************************
-std::vector<Ray*> Camera::makeCurvedPrimaryRays() {
-  std::vector<Ray*> rays;
-  float dx = fov / float(pixelWidth);
-  float dy = fov / (float(pixelHeight) * aspectRatio);
-  float angleX = (fov / 2) - (dx / 2);
-  float angleY = (fov / (2 * aspectRatio)) - (dy / 2);
+std::vector<Ray> Camera::MakeCurvedPrimaryRays() {
+  std::vector<Ray> rays;
+  float dx = m_fov / float(m_pixelWidth);
+  float dy = m_fov / (float(m_pixelHeight) * m_aspectRatio);
+  float angleX = (m_fov / 2) - (dx / 2);
+  float angleY = (m_fov / (2 * m_aspectRatio)) - (dy / 2);
 
-  for (int i = 0; i < pixelHeight; i++) {
-    for (int j = 0; j < pixelWidth; j++) {
+  for (int i = 0; i < m_pixelHeight; i++) {
+    for (int j = 0; j < m_pixelWidth; j++) {
     }
   }
 
   return rays;
 };
 
-std::vector<Ray*> Camera::makeFlatPrimaryRays() {
-  std::vector<Ray*> rays;
-  Vec_3t left = cross(up, direction);
+std::vector<Ray> Camera::MakeFlatPrimaryRays() {
+  std::vector<Ray> rays;
+  Vec_3t left = cross(m_up, m_direction);
 
-  std::cout << "left" << left.toString() << std::endl;
 
-  float sideLength = focalLength * tan(fov / 2);
-  float topLength = sideLength / aspectRatio;
+  float sideLength = m_focalLength * tan(m_fov / 2);
+  float topLength = sideLength / m_aspectRatio;
 
-  Vec_3t dy = -(up * topLength * 2 / pixelHeight);
-  Vec_3t dx = -(left * sideLength * 2 / pixelWidth);
+  Vec_3t dy = -(m_up * topLength * 2 / m_pixelHeight);
+  Vec_3t dx = -(left * sideLength * 2 / m_pixelWidth);
 
-  std::cout << "dx" << dx.toString() << std::endl;
-  std::cout << "dy" << dy.toString() << std::endl;
 
-  Vec_3t topLeft = direction * focalLength + up * topLength + left * sideLength;
+  Vec_3t topLeft = m_direction * m_focalLength + m_up * topLength + left * sideLength;
   Vec_3t screenPoint;
 
-  std::cout << "topLeft" << topLeft.toString() << std::endl;
 
-  for (int i = 0; i < pixelHeight; i++) {
-    for (int j = 0; j < pixelWidth; j++) {
+  for (int i = 0; i < m_pixelHeight; i++) {
+    for (int j = 0; j < m_pixelWidth; j++) {
       screenPoint = topLeft + dx * j + dy * i;
       rays.push_back(
-          new Ray(screenPoint, (screenPoint - position).getNormalized()));
+          Ray(screenPoint, (screenPoint - m_position).GetNormalized()));
     }
   }
   return rays;

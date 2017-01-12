@@ -2,21 +2,12 @@
 #define MATERIAL_H
 
 class Material {
+  float color[3];
   int computeColorType;
-  float color[4];
-  float reflectivity;
-  float refractivity;
-
 public:
-  Material();
-  Material(int computeColorType = 0, float reflectivity = 0,
-           float refractivity = 0);
-  Material(float color[4], int computeColorType = 0, float reflectivity = 0,
-           float refractivity = 0);
+  Material(float r = 0.0f, float g = 1.0f, float b = 0.0f, int computeColorType = 0);
   int getComputeColorType();
-  const float &getColor() const;
-  float getReflectivity();
-  float getRefractivity();
+  float* GetColor();
 };
 
 #endif

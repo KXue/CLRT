@@ -6,19 +6,19 @@
 #include <vector>
 
 class Camera {
-  bool curved;
-  int pixelWidth;
-  int pixelHeight;
-  float fov; // in radians of course
-  float aspectRatio;
-  float focalLength;
-  Vec_3t position;
-  Vec_3t up;
-  Vec_3t direction;
+  bool m_curved;
+  int m_pixelWidth;
+  int m_pixelHeight;
+  float m_fov; // in radians
+  float m_aspectRatio;
+  float m_focalLength;
+  Vec_3t m_position;
+  Vec_3t m_up;
+  Vec_3t m_direction;
 
-  std::vector<Ray*> makeCurvedPrimaryRays();
-  std::vector<Ray*> makeFlatPrimaryRays();
-  Vec_3t findTopLeft(Vec_3t left);
+  std::vector<Ray> MakeCurvedPrimaryRays();
+  std::vector<Ray> MakeFlatPrimaryRays();
+  Vec_3t FindTopLeft(Vec_3t left);
 
 public:
   Camera(int pixelWidth = 800, int pixelHeight = 600, float fov = (M_PI / 2.0),
@@ -26,9 +26,9 @@ public:
          bool curved = false);
   ~Camera();
 
-  void rotate(float dxAxis, float dyAxis, float dzAxis);
-  void translate(float dx, float dy, float dz);
-  std::vector<Ray*> makePrimaryRays();
+  void Rotate(float dxAxis, float dyAxis, float dzAxis);
+  void Translate(float dx, float dy, float dz);
+  std::vector<Ray> MakePrimaryRays();
 };
 
 #endif

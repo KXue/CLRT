@@ -1,11 +1,8 @@
 #include "geometry.hpp"
+#include <iostream>
 
-Ray::Ray() : origin(new Vec_3t()), dir(new Vec_3t(0, 0, 1)){};
-Ray::Ray(Vec_3t origin, Vec_3t dir) : origin(new Vec_3t(origin)), dir(new Vec_3t(dir)){};
-Ray::~Ray(){
-	delete origin;
-	delete dir;
-};
+Ray::Ray(Vec_3t origin, Vec_3t dir) : m_origin(Vec_3t(origin)), m_dir(Vec_3t(dir)){};
+Ray::~Ray(){};
 
-Vec_3t Ray::getDir() const { return *dir; };
-Vec_3t Ray::getPosition() const { return *origin; };
+Vec_3t Ray::GetDirection() const { return m_dir; };
+Vec_3t Ray::GetOrigin() const { return m_origin; };

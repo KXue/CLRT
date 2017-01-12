@@ -14,38 +14,44 @@
 #include "material.hpp"
 #include <vector>
 
+void Update(){
+
+}
+
+void Render(){
+
+}
+
 int main() {
   Display display(800, 600, "Testing123");
 
   Camera testCamera = Camera();
 
-  Sphere testSphere = Sphere(nullptr, 2, 0, 0, -10);
-  std::cout << "Made Sphere." << std::endl;
+  Material testMaterial = Material();
 
-  std::vector<Ray*> rays = testCamera.makePrimaryRays();
-
-  std::cout << "Made Rays." << std::endl;
-
+  Sphere testSphere = Sphere(testMaterial, 2, Vec_3t(0, 0, -10), Vec_3t(0, 0, 1), Vec_3t(0, 1, 0));
 
   unsigned char *buffer = new unsigned char[600 * 4 * 800];
   Vec_3t testVect;
-  for (int i = 0; i < 600 * 800; i++) {
-    if (testSphere.intersects(*(rays.at(i)), testVect)) {
-      buffer[i * 4] = 255;
-      buffer[i * 4 + 1] = 255;
-      buffer[i * 4 + 2] = 0;
-      buffer[i * 4 + 3] = 1;
-    } else {
-      buffer[i * 4] = 0;
-      buffer[i * 4 + 1] = 0;
-      buffer[i * 4 + 2] = 0;
-      buffer[i * 4 + 3] = 1;
-    }
-  }
-
-  std::cout << "Made Buffer." << std::endl;
-
+  float* outMat;
+  std::vector<Ray> rays;
   while (!display.IsClosed()) {
+    rays = testCamera.MakePrimaryRays();
+    for (int i = 0; i < 600 * 800; i++) {
+      if (testSphere.Intersects(rays[i], testVect)) {
+        outMat = testSphere.GetMaterial().GetColor();
+        buffer[i * 4] = outMat[0] * 255;
+        buffer[i * 4 + 1] = outMat[1] * 255;
+        buffer[i * 4 + 2] = outMat[2] * 255;
+        buffer[i * 4 + 3] = 1;
+      } else {
+        buffer[i * 4] = 0;
+        buffer[i * 4 + 1] = 0;
+        buffer[i * 4 + 2] = 0;
+        buffer[i * 4 + 3] = 1;
+      }
+    }
+    rays.clear();
     display.Clear(0.0f, 0.15f, 0.3f, 1.0f);
     display.DrawTexture(buffer, 800, 600);
     display.Update();
